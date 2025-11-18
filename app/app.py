@@ -1,10 +1,13 @@
 from flask import Flask
+from modules.projects import projects_bp
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return "Hello, World!"
+    app.register_blueprint(projects_bp)
+
+    return app
 
 if __name__ == '__main__':
+    app = create_app()
     app.run(debug=True)
