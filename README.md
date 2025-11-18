@@ -1,10 +1,10 @@
-?? Requirements
+### Requirements
 
 - Python 3.9+
 - pip
 
 
-?? 1. Create and activate a virtual environment
+### 1. Create and activate a virtual environment
 Windows
 ```
 python -m venv venv
@@ -17,7 +17,7 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-?? 2. Install dependencies
+### 2. Install dependencies
 
 Make sure you're inside the project folder, then run:
 
@@ -25,7 +25,7 @@ Make sure you're inside the project folder, then run:
 pip install -r requirements.txt
 ```
 
-?? 3. Run the application
+### 3. Run the application
 
 Start the app with:
 
