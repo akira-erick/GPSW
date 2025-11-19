@@ -1,7 +1,7 @@
-from .dto import GetProjectDTO, GetProjectResponseDTO
+from .dto import GetProjectDTO
 
 def get_project_handler(dict_projects: dict, data: GetProjectDTO):
-    
+
     project = dict_projects.get(data.id)
 
     if project is None:

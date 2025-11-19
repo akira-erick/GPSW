@@ -1,16 +1,15 @@
 meta {
-  name: getProject
+  name: deleteProject
   type: http
-  seq: 2
+  seq: 3
 }
 
-get {
-  url: {{endpoint}}/projects/<id>
+delete {
+  url: {{endpoint}}/projects/
   body: none
   auth: inherit
 }
 
 settings {
   encodeUrl: true
-  timeout: 0
 }
