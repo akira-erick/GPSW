@@ -43,7 +43,7 @@ def get_project(id):
     try:
         dto: GetProjectDTO = GetProjectDTO(id=id)
         response = get_project_handler(dict_projects = dict_projects, data = dto)
-        return response, 200
+        return response
     
     except KeyError as e:
         return {"error": f"Missing field: {str(e)}"}, 400
@@ -53,8 +53,6 @@ def delete_project(id):
     try:
         dto: DeleteProjectDTO = DeleteProjectDTO(id=id)
         response = delete_project_handler(dict_projects = dict_projects, data = dto)
-        if response is None:
-            return '', 204
         return response
     except KeyError as e:
         return {"error": f"Missing field: {str(e)}"}, 400
