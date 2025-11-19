@@ -1,6 +1,10 @@
 from flask import Blueprint, request
+
 from .use_cases.create_project.handler import create_project_handler
 from .use_cases.create_project.dto import CreateProjectDTO
+
+from .use_cases.get_project.handler import get_project_handler
+from .use_cases.get_project.dto import GetProjectDTO
 
 projects_bp = Blueprint('projects', __name__, url_prefix='/projects/')
 
@@ -28,5 +32,14 @@ def create_project():
 
         return response, 201
     
+    except KeyError as e:
+        return {"error": f"Missing field: {str(e)}"}, 400
+    
+@projects_bp.route('/<id>', methods=['GET'])
+def get_project(id):
+    try:
+        dto: GetProjectDTO = GetProjectDTO(id=id)
+        response = get_project_handler(dict_projects = dict_projects, data = dto)
+        return response, 200
     except KeyError as e:
         return {"error": f"Missing field: {str(e)}"}, 400
