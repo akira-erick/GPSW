@@ -1,0 +1,15 @@
+meta {
+  name: getAllProjects
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{endpoint}}/projects/all
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

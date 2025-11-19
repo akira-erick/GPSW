@@ -9,6 +9,8 @@ from .use_cases.get_project.dto import GetProjectDTO
 from .use_cases.delete_project.handler import delete_project_handler
 from .use_cases.delete_project.dto import DeleteProjectDTO
 
+from .use_cases.get_all_projects.handler import get_all_projects_handler
+
 projects_bp = Blueprint('projects', __name__, url_prefix='/projects/')
 
 dict_projects = {}
@@ -33,7 +35,7 @@ def create_project():
 
         response = create_project_handler(dict_projects = dict_projects, data = dto)
 
-        return response, 201
+        return response
     
     except KeyError as e:
         return {"error": f"Missing field: {str(e)}"}, 400
@@ -56,3 +58,9 @@ def delete_project(id):
         return response
     except KeyError as e:
         return {"error": f"Missing field: {str(e)}"}, 400
+    
+
+@projects_bp.route('/all', methods=['GET'])
+def get_all_projects():
+    response = get_all_projects_handler(dict_projects = dict_projects)
+    return response, 200
