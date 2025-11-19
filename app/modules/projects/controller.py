@@ -1,9 +1,32 @@
-from flask import Blueprint
-from .service import get_message
+from flask import Blueprint, request
+from .use_cases.create_project.handler import create_project_handler
+from .use_cases.create_project.dto import CreateProjectDTO
 
-projects_bp = Blueprint('projects', __name__, url_prefix='/')
+projects_bp = Blueprint('projects', __name__, url_prefix='/projects/')
 
-@projects_bp.route('/')
-def index():
-    message = get_message()
-    return message
+dict_projects = {}
+
+@projects_bp.route('/', methods=['POST'])
+def create_project():
+
+    data = request.get_json()
+    if not data:
+        return {"error": "Missing data"}, 400
+    
+    try:
+        name = data['name']
+        description = data['description']
+        category = data['category']
+
+        dto: CreateProjectDTO = CreateProjectDTO(
+            name=name,
+            description=description,
+            category=category
+        )
+
+        response = create_project_handler(dict_projects = dict_projects, data = dto)
+
+        return response, 201
+    
+    except KeyError as e:
+        return {"error": f"Missing field: {str(e)}"}, 400
