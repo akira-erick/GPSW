@@ -3,7 +3,9 @@ from .dto import CreateProjectResponseDTO, CreateProjectDTO, ProjectDTO
 from flask import jsonify
 from dataclasses import asdict
 
-def create_project_handler(dict_projects: dict, data: CreateProjectDTO):
+def create_project_handler(connection, data: CreateProjectDTO):
+
+    cur = connection.cursor()
 
     id = uuid.uuid4()
 
@@ -14,7 +16,14 @@ def create_project_handler(dict_projects: dict, data: CreateProjectDTO):
         category=data.category
     )
 
-    dict_projects[str(id)] = asdict(project)
+    cur.execute(
+        """
+        INSERT INTO projects (id, name, description, category)
+        VALUES (%s, %s, %s, %s)
+        """,
+        (project.id, project.name, project.description, project.category)
+    )
+
     response_dto: CreateProjectResponseDTO = CreateProjectResponseDTO(id=str(id))
 
     return jsonify(response_dto), 201

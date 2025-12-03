@@ -5,11 +5,12 @@ meta {
 }
 
 delete {
-  url: {{endpoint}}/projects/
+  url: {{endpoint}}/projects/<id>
   body: none
   auth: inherit
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

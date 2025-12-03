@@ -1,13 +1,30 @@
 from .dto import ProjectDTO, GetAllProjectsResponseResponseDTO
 from flask import jsonify
-from dataclasses import asdict
 
-def get_all_projects_handler(dict_projects: dict):
+def get_all_projects_handler(connection):
+
+    cur = connection.cursor()
+
     projects_list = []
-    
-    for project_dict in dict_projects.values():
-        project_dto = ProjectDTO(**project_dict)
-        projects_list.append(project_dto)
+
+    cur.execute(
+        """
+        SELECT id, name, description, category
+        FROM projects
+        """
+    )
+
+    dict_projects = {}
+    for row in cur.fetchall():
+        project_dict = {
+            "id": row[0],
+            "name": row[1],
+            "description": row[2],
+            "category": row[3]
+        }
+        dict_projects[row[0]] = project_dict
+    for project in dict_projects.values():
+        projects_list.append(ProjectDTO(**project))
     
     response_dto = GetAllProjectsResponseResponseDTO(projects=projects_list)
     

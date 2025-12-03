@@ -11,12 +11,13 @@ from .use_cases.delete_project.dto import DeleteProjectDTO
 
 from .use_cases.get_all_projects.handler import get_all_projects_handler
 
-projects_bp = Blueprint('projects', __name__, url_prefix='/projects/')
+from ...db_service import get_db_connection
 
-dict_projects = {}
+projects_bp = Blueprint('projects', __name__, url_prefix='/projects/')
 
 @projects_bp.route('/', methods=['POST'])
 def create_project():
+    conn = get_db_connection()
 
     data = request.get_json()
     if not data:
@@ -33,7 +34,7 @@ def create_project():
             category=category
         )
 
-        response = create_project_handler(dict_projects = dict_projects, data = dto)
+        response = create_project_handler(conn, data = dto)
 
         return response
     
@@ -42,9 +43,10 @@ def create_project():
     
 @projects_bp.route('/<id>', methods=['GET'])
 def get_project(id):
+    conn = get_db_connection()
     try:
         dto: GetProjectDTO = GetProjectDTO(id=id)
-        response = get_project_handler(dict_projects = dict_projects, data = dto)
+        response = get_project_handler(conn, data = dto)
         return response
     
     except KeyError as e:
@@ -52,9 +54,10 @@ def get_project(id):
 
 @projects_bp.route('/<id>', methods=['DELETE'])
 def delete_project(id):
+    conn = get_db_connection()
     try:
         dto: DeleteProjectDTO = DeleteProjectDTO(id=id)
-        response = delete_project_handler(dict_projects = dict_projects, data = dto)
+        response = delete_project_handler(conn, data = dto)
         return response
     except KeyError as e:
         return {"error": f"Missing field: {str(e)}"}, 400
@@ -62,5 +65,6 @@ def delete_project(id):
 
 @projects_bp.route('/all', methods=['GET'])
 def get_all_projects():
-    response = get_all_projects_handler(dict_projects = dict_projects)
+    conn = get_db_connection()
+    response = get_all_projects_handler(conn)
     return response, 200
